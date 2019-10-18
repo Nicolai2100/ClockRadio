@@ -2,6 +2,7 @@ package dk.dtu.philipsclockradio;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ContextClockradio {
     private State currentState;
@@ -50,18 +51,33 @@ public class ContextClockradio {
     }
 
     //Opdaterer kontekst time state og UI
-    void setRadio(Double radioChannel, String radioFrequency) {
+    void setRadio(Double radioChannel) {
         this.mRadioChannel = radioChannel;
-        this.mRadioFrequency = radioFrequency;
         if (currentState.getClass().getSimpleName().equals("StateRadioOn")) {
             updateDisplayRadio();
         }
     }
-    //todo display fm/am + frekvens
+
     void updateDisplayRadio() {
-        mDisplayText = mRadioFrequency + " " + mRadioChannel.toString();
+        mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
+
+    //todo display fm/am + frekvens
+    void showDisplayFrequencyRadio(String frequency) {
+        this.mRadioFrequency = frequency;
+        ui.setDisplayText(mRadioFrequency);
+        System.out.println("Current frequency: " + frequency);
+/*
+todo implementer
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+    }
+
 
     public Date getTime() {
         return mTime;
