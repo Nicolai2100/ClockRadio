@@ -6,12 +6,21 @@ import java.util.Date;
 
 public class StateStandby extends StateAdapter {
 
+    private static StateStandby instance = null;
+
     private Date mTime;
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
 
-    StateStandby(Date time) {
+    private StateStandby(Date time) {
         mTime = time;
+    }
+
+    public static StateStandby getInstance(Date time) {
+        if (instance == null){
+            return instance = new StateStandby(time);
+        }
+        return instance;
     }
 
     //Opdaterer hvert 60. sekund med + 1 min til tiden
@@ -59,6 +68,6 @@ public class StateStandby extends StateAdapter {
     //Tænder radioen
     @Override
     public void onClick_Power(ContextClockradio context) {
-        context.setState(new StateRadioOn());
+        context.setState(StateRadioOn.getInstant());
     }
 }

@@ -6,7 +6,8 @@ import java.util.Date;
 public class ContextClockradio {
     private State currentState;
     private Date mTime;
-    private Double radioFrequency;
+    private Double mRadioChannel;
+    private String mRadioFrequency;
     private String mDisplayText;
     public boolean isClockRunning = false;
 
@@ -23,7 +24,7 @@ public class ContextClockradio {
         }
 
         //Når app'en starter, så går vi ind i Standby State
-        currentState = new StateStandby(mTime);
+        currentState = StateStandby.getInstance(mTime);
         currentState.onEnterState(this);
     }
 
@@ -49,21 +50,18 @@ public class ContextClockradio {
     }
 
     //Opdaterer kontekst time state og UI
-    void setRadioFrequency(Double radioFrequency) {
-        this.radioFrequency = radioFrequency;
-        //todo sæt stateRadioOn
+    void setRadio(Double radioChannel, String radioFrequency) {
+        this.mRadioChannel = radioChannel;
+        this.mRadioFrequency = radioFrequency;
         if (currentState.getClass().getSimpleName().equals("StateRadioOn")) {
-            updateDisplayTime();
+            updateDisplayRadio();
         }
-        updateDisplayRadioFrequency();
     }
-
-    //todo
-    void updateDisplayRadioFrequency() {
-        mDisplayText = radioFrequency.toString();
+    //todo display fm/am + frekvens
+    void updateDisplayRadio() {
+        mDisplayText = mRadioFrequency + " " + mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
-
 
     public Date getTime() {
         return mTime;
