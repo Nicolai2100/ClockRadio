@@ -1,6 +1,7 @@
 package dk.dtu.philipsclockradio;
 
 import android.os.Handler;
+
 import java.util.Date;
 
 public class StateStandby extends StateAdapter {
@@ -9,7 +10,7 @@ public class StateStandby extends StateAdapter {
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
 
-    StateStandby(Date time){
+    StateStandby(Date time) {
         mTime = time;
     }
 
@@ -44,7 +45,7 @@ public class StateStandby extends StateAdapter {
         mContext = context;
 
         context.updateDisplayTime();
-        if(!context.isClockRunning){
+        if (!context.isClockRunning) {
             startClock();
         }
     }
@@ -55,4 +56,9 @@ public class StateStandby extends StateAdapter {
         context.setState(new StateSetTime());
     }
 
+    //Tænder radioen
+    @Override
+    public void onClick_Power(ContextClockradio context) {
+        context.setState(new StateRadioOn());
+    }
 }
