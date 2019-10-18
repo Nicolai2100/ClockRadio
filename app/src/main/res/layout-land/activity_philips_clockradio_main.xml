@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/textview_bg"
+    tools:context=".MainUI">
+
+    <ImageView
+        android:id="@+id/bg"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        app:layout_constraintDimensionRatio="1.65:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/front_view" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="45dp"
+        android:fontFamily="@font/digital7"
+        android:text="13:46"
+        android:textAlignment="center"
+        android:textColor="#BBFA78"
+        android:textSize="110sp"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_snooze"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_hour"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="HOUR"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bg" />
+
+            <Button
+                android:id="@+id/btn_min"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="MIN"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_hour"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+            <Button
+                android:id="@+id/btn_preset"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="PRESET"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_min"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+            <ImageButton
+                android:id="@+id/btn_power"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/power"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_preset"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+            <Button
+                android:id="@+id/btn_sleep"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="SLEEP"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_power"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+            <Button
+                android:id="@+id/btn_al1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="AL1"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_sleep"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+            <Button
+                android:id="@+id/btn_al2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/custombutton"
+                android:text="AL2"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintStart_toEndOf="@+id/btn_al1"
+                app:layout_constraintTop_toTopOf="@+id/btn_hour" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="#0f0f0f"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="RADIO"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_snooze"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custombutton2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="SET TIME"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="44dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="- TUNING +"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="58dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="- VOLUME +"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/textView8" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="34dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="SCAN"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toBottomOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/textView9" />
+
+    <ImageView
+        android:id="@+id/circle1"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg"
+        app:layout_constraintVertical_bias="0.31"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg"
+        app:layout_constraintVertical_bias="0.39"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/circle4"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg"
+        app:layout_constraintVertical_bias="0.31"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/circle3"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg"
+        app:layout_constraintVertical_bias="0.23000002"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/circle5"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bg"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="@+id/bg"
+        app:layout_constraintTop_toTopOf="@+id/bg"
+        app:layout_constraintVertical_bias="0.39"
+        app:srcCompat="@drawable/circle" />
+
+</android.support.constraint.ConstraintLayout>
