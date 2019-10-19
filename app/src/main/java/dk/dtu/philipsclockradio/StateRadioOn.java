@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class StateRadioOn extends StateAdapter {
     //todo am og fm frekvens gemmes og aktiveres når der skiftes
-    private static StateRadioOn instant = null;
+    private static StateRadioOn instance = null;
 
     private ArrayList<Double> radioChannelsList;
 
@@ -24,11 +24,11 @@ public class StateRadioOn extends StateAdapter {
         }
     }
 
-    public static StateRadioOn getInstant() {
-        if (instant == null) {
-            instant = new StateRadioOn();
+    public static StateRadioOn getInstance() {
+        if (instance == null) {
+            instance = new StateRadioOn();
         }
-        return instant;
+        return instance;
     }
 
     @Override
@@ -98,9 +98,7 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onClick_Preset(ContextClockradio context) {
-/*
-        context.setState(new StateStandby(context.getTime()));
-*/
+        //context.setState(new StateStandby(context.getTime()));
     }
 
     private ArrayList<Double> getRadioChannelsList() {

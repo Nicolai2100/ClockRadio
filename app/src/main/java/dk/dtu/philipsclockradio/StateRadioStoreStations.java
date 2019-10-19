@@ -1,7 +1,7 @@
 package dk.dtu.philipsclockradio;
 
 public class StateRadioStoreStations extends StateAdapter {
-    private static StateRadioStoreStations instant = null;
+    private static StateRadioStoreStations instance = null;
 
     //todo slet denne
     private StateRadioOn stateRadioOn;
@@ -16,10 +16,10 @@ public class StateRadioStoreStations extends StateAdapter {
     }
 
     public static StateRadioStoreStations getInstant(StateRadioOn stateRadioOnInstant, double currentRadioChannel) {
-        if (instant == null) {
-            instant = new StateRadioStoreStations(stateRadioOnInstant, currentRadioChannel);
+        if (instance == null) {
+            instance = new StateRadioStoreStations(stateRadioOnInstant, currentRadioChannel);
         }
-        return instant;
+        return instance;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class StateRadioStoreStations extends StateAdapter {
     @Override
     public void onLongClick_Preset(ContextClockradio context) {
         savedChannels[pointer] = currentRadioChannel;
-        context.setState(StateRadioOn.getInstant());
+        context.setState(StateRadioOn.getInstance());
     }
 
     @Override

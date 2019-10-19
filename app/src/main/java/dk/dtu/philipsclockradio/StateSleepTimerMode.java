@@ -4,7 +4,7 @@ import android.os.Handler;
 
 public class StateSleepTimerMode extends StateAdapter {
 
-    private static StateSleepTimerMode instant = null;
+    private static StateSleepTimerMode instance = null;
     private Handler mainHandler = new Handler();
     private int sleepTime;
     private boolean sleepTimerOn;
@@ -13,11 +13,11 @@ public class StateSleepTimerMode extends StateAdapter {
     private StateSleepTimerMode() {
     }
 
-    public static StateSleepTimerMode getInstant() {
-        if (instant == null) {
-            instant = new StateSleepTimerMode();
+    public static StateSleepTimerMode getInstance() {
+        if (instance == null) {
+            instance = new StateSleepTimerMode();
         }
-        return instant;
+        return instance;
     }
 
     @Override
