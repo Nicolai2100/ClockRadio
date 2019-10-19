@@ -62,6 +62,9 @@ public class ContextClockradio {
         mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
+    void updateDisplaySimpleString(String input) {
+        ui.setDisplayText(input);
+    }
 
     //todo display fm/am + frekvens
     void showDisplayFrequencyRadio(String frequency) {

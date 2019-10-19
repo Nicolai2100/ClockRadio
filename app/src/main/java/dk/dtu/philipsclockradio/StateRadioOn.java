@@ -14,7 +14,7 @@ public class StateRadioOn extends StateAdapter {
     private Double fmRadioChannel = 0.0;
     private Double amRadioChannel = 0.0;
 
-    StateRadioOn() {
+    private StateRadioOn() {
         radioChannelsList = getRadioChannelsList();
 
         if (currentRadioChannel == null) {
@@ -67,12 +67,16 @@ public class StateRadioOn extends StateAdapter {
     @Override
     public void onClick_Min(ContextClockradio context) {
         currentRadioChannel = currentRadioChannel + 1;
+        if (currentRadioChannel > 108)
+            currentRadioChannel = 0.0;
         context.setRadio(currentRadioChannel);
     }
 
     @Override
     public void onClick_Hour(ContextClockradio context) {
         currentRadioChannel = currentRadioChannel - 1;
+        if (currentRadioChannel < 0)
+            currentRadioChannel = 108.0;
         context.setRadio(currentRadioChannel);
     }
 
@@ -152,5 +156,9 @@ public class StateRadioOn extends StateAdapter {
         return newChannel;
     }
 
+    @Override
+    public void onLongClick_Preset(ContextClockradio context) {
+        context.setState(StateRadioStoreStations.getInstant(this, currentRadioChannel));
+    }
 }
 
