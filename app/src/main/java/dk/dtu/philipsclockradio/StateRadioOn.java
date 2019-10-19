@@ -82,8 +82,9 @@ public class StateRadioOn extends StateAdapter {
         int index = radioChannelsList.indexOf(currentRadioChannel);
         double newChannel = 0;
 
+
         if (!radioChannelsList.contains(currentRadioChannel)) {
-            currentRadioChannel = findClosest(radioChannelsList, currentRadioChannel);
+            currentRadioChannel = findClosest2(radioChannelsList, currentRadioChannel);
             context.setRadio(currentRadioChannel);
             return;
         }
@@ -151,16 +152,36 @@ public class StateRadioOn extends StateAdapter {
         return radioChannelsList;
     }
 
-    //Taget fra: https://www.geeksforgeeks.org/find-closest-number-array/
+    public double findClosest2(ArrayList<Double> arr, double target) {
+        // Corner cases
+        if (target <= arr.get(0))
+            return arr.get(0);
+        if (target >= arr.get(arr.size() - 1))
+            return arr.get(0);
 
+        int i = 0;
+
+        for (Double channel : arr) {
+            if (target > arr.get(i) && target <= arr.get(i+1)){
+                return arr.get(i+1);
+            }
+            i++;
+        }
+
+        return 0.0;
+    }
+
+
+    //Taget fra: https://www.geeksforgeeks.org/find-closest-number-array/
+    //Virker kun når man går op til højere kanal.
     public static double findClosest(ArrayList<Double> arr, double target) {
         int n = arr.size();
 
-        // Corner cases todo gør færdig
+        // Corner cases
         if (target <= arr.get(0))
             return arr.get(0);
         if (target >= arr.get(n - 1))
-            return arr.get(n - 1);
+            return arr.get(0);
 
         // Doing binary search
         int i = 0, j = n, mid = 0;
@@ -179,7 +200,6 @@ public class StateRadioOn extends StateAdapter {
                 if (mid > 0 && target > arr.get(mid - 1))
                     return getClosest(arr.get(mid - 1),
                             arr.get(mid - 1), target);
-
                 /* Repeat for left half */
                 j = mid;
             }
@@ -192,7 +212,6 @@ public class StateRadioOn extends StateAdapter {
                 i = mid + 1; // update i
             }
         }
-
         // Only single element left after search
         return arr.get(mid);
     }
