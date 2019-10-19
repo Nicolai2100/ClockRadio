@@ -79,26 +79,8 @@ public class StateRadioOn extends StateAdapter {
     //Søger efter næste kanal
     @Override
     public void onLongClick_Min(ContextClockradio context) {
-        int index = radioChannelsList.indexOf(currentRadioChannel);
-        double newChannel = 0;
-
-
         if (!radioChannelsList.contains(currentRadioChannel)) {
-            currentRadioChannel = findClosest2(radioChannelsList, currentRadioChannel);
-            context.setRadio(currentRadioChannel);
-            return;
-        }
-
-        try {
-            newChannel = radioChannelsList.get(index + 1);
-            if (newChannel > currentRadioChannel) {
-                currentRadioChannel = newChannel;
-            } else
-                currentRadioChannel = radioChannelsList.get(0);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            currentRadioChannel = radioChannelsList.get(0);
-        } catch (IndexOutOfBoundsException e) {
-            currentRadioChannel = radioChannelsList.get(0);
+            currentRadioChannel = findNextChannel(radioChannelsList, currentRadioChannel);
         }
         context.setRadio(currentRadioChannel);
     }
@@ -106,28 +88,8 @@ public class StateRadioOn extends StateAdapter {
     //Søger efter forrige kanal
     @Override
     public void onLongClick_Hour(ContextClockradio context) {
-        int index = radioChannelsList.indexOf(currentRadioChannel);
-        double newChannel;
-
-        try {
-            newChannel = radioChannelsList.get(index - 1);
-            if (newChannel != 0) {
-                currentRadioChannel = newChannel;
-            } else
-                currentRadioChannel = radioChannelsList.get(radioChannelsList.size() - 1);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            currentRadioChannel = radioChannelsList.get(radioChannelsList.size() - 1);
-        } catch (IndexOutOfBoundsException e) {
-            currentRadioChannel = radioChannelsList.get(radioChannelsList.size() - 1);
-        }
-
-        if (currentRadioFrequency.equalsIgnoreCase("am")) {
-            amRadioChannel = currentRadioChannel;
-        } else {
-            fmRadioChannel = currentRadioChannel;
-        }
+        currentRadioChannel = findPreviousChannel(radioChannelsList, currentRadioChannel);
         context.setRadio(currentRadioChannel);
-
     }
 
     @Override
@@ -152,76 +114,42 @@ public class StateRadioOn extends StateAdapter {
         return radioChannelsList;
     }
 
-    public double findClosest2(ArrayList<Double> arr, double target) {
+    public double findNextChannel(ArrayList<Double> arr, double target) {
+
+        int lastChannelIndex = arr.size() - 1;
+        double newCHannel = 0.0;
         // Corner cases
-        if (target <= arr.get(0))
+        if (target < arr.get(0))
             return arr.get(0);
-        if (target >= arr.get(arr.size() - 1))
-            return arr.get(0);
-
-        int i = 0;
-
-        for (Double channel : arr) {
-            if (target > arr.get(i) && target <= arr.get(i+1)){
-                return arr.get(i+1);
-            }
-            i++;
-        }
-
-        return 0.0;
-    }
-
-
-    //Taget fra: https://www.geeksforgeeks.org/find-closest-number-array/
-    //Virker kun når man går op til højere kanal.
-    public static double findClosest(ArrayList<Double> arr, double target) {
-        int n = arr.size();
-
-        // Corner cases
-        if (target <= arr.get(0))
-            return arr.get(0);
-        if (target >= arr.get(n - 1))
+        if (target >= arr.get(lastChannelIndex))
             return arr.get(0);
 
-        // Doing binary search
-        int i = 0, j = n, mid = 0;
-        while (i < j) {
-            mid = (i + j) / 2;
-
-            if (arr.get(mid) == target)
-                return arr.get(mid);
-
-            /* If target is less than array element,
-               then search in left */
-            if (target < arr.get(mid)) {
-
-                // If target is greater than previous
-                // to mid, return closest of two
-                if (mid > 0 && target > arr.get(mid - 1))
-                    return getClosest(arr.get(mid - 1),
-                            arr.get(mid - 1), target);
-                /* Repeat for left half */
-                j = mid;
-            }
-
-            // If target is greater than mid
-            else {
-                if (mid < n - 1 && target < arr.get(mid + 1))
-                    return getClosest(arr.get(mid),
-                            arr.get(mid + 1), target);
-                i = mid + 1; // update i
+        for (int i = 0; i < lastChannelIndex; i++) {
+            if (target >= arr.get(i) && target <= arr.get(i + 1)) {
+                newCHannel = arr.get(i + 1);
+                break;
             }
         }
-        // Only single element left after search
-        return arr.get(mid);
+        return newCHannel;
     }
 
-    public static double getClosest(double val1, double val2,
-                                    double target) {
-        if (target - val1 >= val2 - target)
-            return val2;
-        else
-            return val1;
+    public double findPreviousChannel(ArrayList<Double> arr, double target) {
+
+        int lastChannelIndex = arr.size() - 1;
+        double newChannel = 0.0;
+        // Corner cases
+        if (target <= arr.get(0))
+            return arr.get(lastChannelIndex);
+        if (target > arr.get(lastChannelIndex))
+            return arr.get(lastChannelIndex);
+
+        for (int i = 0; i < lastChannelIndex; i++) {
+            if (target > arr.get(i) && target <= arr.get(i + 1)) {
+                newChannel = arr.get(i);
+                break;
+            }
+        }
+        return newChannel;
     }
 }
 
