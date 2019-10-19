@@ -4,7 +4,7 @@ import android.os.Handler;
 
 import java.util.Date;
 
-public class StateStandby extends StateAdapter {
+public class StateStandby extends StateAdapter{
 
     private static StateStandby instance = null;
 
@@ -69,5 +69,10 @@ public class StateStandby extends StateAdapter {
     @Override
     public void onClick_Power(ContextClockradio context) {
         context.setState(StateRadioOn.getInstant());
+    }
+
+    @Override
+    public void onClick_Sleep(ContextClockradio context) {
+        context.setState(StateSleepTimerMode.getInstant());
     }
 }

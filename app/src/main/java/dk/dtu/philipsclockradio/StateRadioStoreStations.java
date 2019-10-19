@@ -3,6 +3,7 @@ package dk.dtu.philipsclockradio;
 public class StateRadioStoreStations extends StateAdapter {
     private static StateRadioStoreStations instant = null;
 
+    //todo slet denne
     private StateRadioOn stateRadioOn;
     private double currentRadioChannel;
     private double[] savedChannels;
