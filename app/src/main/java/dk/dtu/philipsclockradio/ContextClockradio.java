@@ -5,6 +5,7 @@ import android.os.Handler;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ContextClockradio {
     public static MainUI ui;
@@ -15,6 +16,7 @@ public class ContextClockradio {
     private Double mRadioChannel;
     private String mDisplayText;
     private Time alarmTime;
+    private int sleepTime;
 
     private Handler mainHandler = new Handler();
 
@@ -67,8 +69,8 @@ public class ContextClockradio {
         System.out.println("Current frequency: " + frequency);
         ui.setDisplayText(frequency);
 
-        ShowFrequencyRunnable showFrequencyRunnable = new ShowFrequencyRunnable();
-        new Thread(showFrequencyRunnable).start();
+        TimerRunnable timerRunnable = new TimerRunnable("frequency");
+        new Thread(timerRunnable).start();
     }
 
     public Date getTime() {
@@ -135,9 +137,13 @@ public class ContextClockradio {
         currentState.onLongClick_Min(this);
     }
 
-    public void onLongClick_Preset() { currentState.onLongClick_Preset(this); }
+    public void onLongClick_Preset() {
+        currentState.onLongClick_Preset(this);
+    }
 
-    public void onLongClick_Power() { currentState.onLongClick_Power(this); }
+    public void onLongClick_Power() {
+        currentState.onLongClick_Power(this);
+    }
 
     public void onLongClick_Sleep() {
         currentState.onLongClick_Sleep(this);
@@ -159,21 +165,97 @@ public class ContextClockradio {
         this.alarmTime = time;
     }
 
+    public void setSleepTimer(int sleepTime) {
+        this.sleepTime = sleepTime;
+        System.out.println("Sleep timer on for " + sleepTime + " minutes");
+        TimerRunnable timerRunnable = new TimerRunnable("sleepTimer");
+        new Thread(timerRunnable).start();
+    }
+
+
     //Lader fm/am blive set på displayet når der skiftes mellem disse.
-    class ShowFrequencyRunnable implements Runnable {
+    class TimerRunnable implements Runnable {
+        String application = null;
+
+        public TimerRunnable(String application) {
+            this.application = application;
+        }
+
         @Override
         public void run() {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateDisplayRadioChannel();
+
+            if (application.equalsIgnoreCase("frequency")) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            });
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateDisplayRadioChannel();
+                    }
+                });
+            }
+            if (application.equalsIgnoreCase("alarmTime")) {
+               //todo implementer
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateDisplayRadioChannel();
+                    }
+                });
+
+
+            }
+
+            if (application.equalsIgnoreCase("sleepTimer")) {
+                try {
+                    Thread.sleep(sleepTime * 1000 * 60);
+                    //todo slet - for test: Thread.sleep(8 * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Snap 1");
+
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ui.turnOffLED(3);
+                        if (currentState == StateRadioOn.getInstance()) {
+                            System.out.println("Snap 2");
+                            setState(StateStandby.getInstance(getTime()));
+                        }
+                    }
+                });
+            }
         }
     }
 }
+
+
+/*if (application.equalsIgnoreCase("sleepTimer")) {
+                try {
+//                    Thread.sleep(sleepTime * 1000 * 60);
+                    Thread.sleep(10 *1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Snap 1");
+                        if (currentState.equals("StateRadioOn")) {
+                            System.out.println("Snap 2");
+                            setState(StateStandby.getInstance(getTime()));
+                        }
+                        ui.turnOffLED(3);
+
+                    }
+                });
+            }*/

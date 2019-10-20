@@ -60,10 +60,6 @@ public class StateSleepTimerMode extends StateAdapter {
         new Thread(runnable).start();
     }
 
-    void back() {
-        context.setState(StateStandby.getInstance(context.getTime()));
-    }
-
     class CountDownRunnable implements Runnable {
         int seconds;
 
@@ -83,7 +79,10 @@ public class StateSleepTimerMode extends StateAdapter {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    back();
+                    if (sleepTimerOn){
+                        context.setSleepTimer(sleepTime);
+                    }
+                    context.setState(StateStandby.getInstance(context.getTime()));
                 }
             });
         }
