@@ -2,21 +2,21 @@ package dk.dtu.philipsclockradio;
 
 import android.os.Handler;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class ContextClockradio {
+    public static MainUI ui;
+
+    public boolean isClockRunning = false;
     private State currentState;
     private Date mTime;
     private Double mRadioChannel;
     private String mDisplayText;
-    public boolean isClockRunning = false;
+    private Time alarmTime;
 
     private Handler mainHandler = new Handler();
-
-
-    public static MainUI ui;
 
     public ContextClockradio(MainUI context) {
         ui = context;
@@ -41,14 +41,6 @@ public class ContextClockradio {
         System.out.println("Current state: " + newState.getClass().getSimpleName());
     }
 
-    //Opdaterer kontekst time state og UI
-    void setTime(Date time) {
-        mTime = time;
-        if (currentState.getClass().getSimpleName().equals("StateStandby")) {
-            updateDisplayTime();
-        }
-    }
-
     void updateDisplayTime() {
         mDisplayText = mTime.toString().substring(11, 16);
         ui.setDisplayText(mDisplayText);
@@ -58,11 +50,11 @@ public class ContextClockradio {
     void setRadio(Double radioChannel) {
         this.mRadioChannel = radioChannel;
         if (currentState.getClass().getSimpleName().equals("StateRadioOn")) {
-            updateDisplayRadio();
+            updateDisplayRadioChannel();
         }
     }
 
-    void updateDisplayRadio() {
+    void updateDisplayRadioChannel() {
         mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
@@ -71,12 +63,16 @@ public class ContextClockradio {
         ui.setDisplayText(input);
     }
 
-    void showDisplayFrequencyRadio(String frequency) {
+    void updateDisplayRadioFrequency(String frequency) {
         System.out.println("Current frequency: " + frequency);
         ui.setDisplayText(frequency);
 
         ShowFrequencyRunnable showFrequencyRunnable = new ShowFrequencyRunnable();
         new Thread(showFrequencyRunnable).start();
+    }
+
+    public Date getTime() {
+        return mTime;
     }
 
     /*
@@ -90,9 +86,12 @@ public class ContextClockradio {
         }
     }*/
 
-
-    public Date getTime() {
-        return mTime;
+    //Opdaterer kontekst time state og UI
+    void setTime(Date time) {
+        mTime = time;
+        if (currentState.getClass().getSimpleName().equals("StateStandby")) {
+            updateDisplayTime();
+        }
     }
 
     //Disse metoder bliver kaldt fra UI tråden
@@ -136,13 +135,9 @@ public class ContextClockradio {
         currentState.onLongClick_Min(this);
     }
 
-    public void onLongClick_Preset() {
-        currentState.onLongClick_Preset(this);
-    }
+    public void onLongClick_Preset() { currentState.onLongClick_Preset(this); }
 
-    public void onLongClick_Power() {
-        currentState.onLongClick_Power(this);
-    }
+    public void onLongClick_Power() { currentState.onLongClick_Power(this); }
 
     public void onLongClick_Sleep() {
         currentState.onLongClick_Sleep(this);
@@ -160,6 +155,10 @@ public class ContextClockradio {
         currentState.onLongClick_Snooze(this);
     }
 
+    public void setAlarm(Time time) {
+        this.alarmTime = time;
+    }
+
     //Lader fm/am blive set på displayet når der skiftes mellem disse.
     class ShowFrequencyRunnable implements Runnable {
         @Override
@@ -172,7 +171,7 @@ public class ContextClockradio {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    updateDisplayRadio();
+                    updateDisplayRadioChannel();
                 }
             });
         }

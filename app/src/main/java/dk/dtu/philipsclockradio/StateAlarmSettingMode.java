@@ -1,11 +1,21 @@
 package dk.dtu.philipsclockradio;
 
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Formatter;
+
 public class StateAlarmSettingMode extends StateAdapter {
     private static StateAlarmSettingMode instance = null;
     private boolean alarmOn;
     private int hour = 00;
     private int minutte = 00;
+    Time alarmTime;
+    DateFormat sdf = new SimpleDateFormat("HH:mm");
 
+    private StateAlarmSettingMode(){
+        alarmTime = new Time(00,00,0);
+    }
 
     public static StateAlarmSettingMode getInstance() {
         if (instance == null) {
@@ -17,7 +27,8 @@ public class StateAlarmSettingMode extends StateAdapter {
     @Override
     public void onEnterState(ContextClockradio context) {
         context.ui.turnOnTextBlink();
-        context.showDisplayFrequencyRadio(hour+":"+minutte);
+        String strDate = sdf.format(alarmTime);
+        context.updateDisplaySimpleString(strDate);
     }
 
     @Override
@@ -29,26 +40,33 @@ public class StateAlarmSettingMode extends StateAdapter {
     public void onClick_Hour(ContextClockradio context) {
         ++hour;
         if (hour > 23){
-            hour = 00;
+            hour = 0;
         }
-        context.showDisplayFrequencyRadio(hour+":"+minutte);
-    }
+        alarmTime = new Time(hour,minutte,0);
+        String strDate = sdf.format(alarmTime);
+        context.updateDisplaySimpleString(strDate);    }
 
     @Override
     public void onClick_Min(ContextClockradio context) {
         ++minutte;
         if (minutte > 59){
-            minutte = 00;
+            minutte = 0;
             ++hour;
         }
-        context.showDisplayFrequencyRadio(hour+":"+minutte);
-    }
+        alarmTime = new Time(hour,minutte,0);
+        String strDate = sdf.format(alarmTime);
+        context.updateDisplaySimpleString(strDate);    }
 
+    //todo - både AL1 og AL2 skal holdes nede samtidig
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
         //alarm on
         alarmOn = true;
         context.ui.turnOnLED(2);
+        context.setAlarm(alarmTime);
+        System.out.println("Alarm set for " + alarmTime);
         context.setState(StateStandby.getInstance(context.getTime()));
+
+        //todo - skal alarmen startes / køre i context i en ny tråd?
     }
 }

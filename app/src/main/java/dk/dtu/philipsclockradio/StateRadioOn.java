@@ -31,7 +31,7 @@ public class StateRadioOn extends StateAdapter {
     @Override
     public void onEnterState(ContextClockradio context) {
         context.setRadio(currentRadioChannel);
-        context.showDisplayFrequencyRadio(currentRadioFrequency);
+        context.updateDisplayRadioFrequency(currentRadioFrequency);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class StateRadioOn extends StateAdapter {
             currentRadioChannel = fmRadioChannel;
         }
         context.setRadio(currentRadioChannel);
-        context.showDisplayFrequencyRadio(currentRadioFrequency);
+        context.updateDisplayRadioFrequency(currentRadioFrequency);
     }
 
     @Override
