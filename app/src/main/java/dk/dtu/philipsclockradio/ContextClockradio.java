@@ -1,5 +1,7 @@
 package dk.dtu.philipsclockradio;
 
+import android.os.Handler;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -8,9 +10,11 @@ public class ContextClockradio {
     private State currentState;
     private Date mTime;
     private Double mRadioChannel;
-    private String mRadioFrequency;
     private String mDisplayText;
     public boolean isClockRunning = false;
+
+    private Handler mainHandler = new Handler();
+
 
     public static MainUI ui;
 
@@ -62,24 +66,29 @@ public class ContextClockradio {
         mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
+
     void updateDisplaySimpleString(String input) {
         ui.setDisplayText(input);
     }
 
-    //todo display fm/am + frekvens
     void showDisplayFrequencyRadio(String frequency) {
-        this.mRadioFrequency = frequency;
-        ui.setDisplayText(mRadioFrequency);
         System.out.println("Current frequency: " + frequency);
-/*
-todo implementer
+        ui.setDisplayText(frequency);
 
+        ShowFrequencyRunnable showFrequencyRunnable = new ShowFrequencyRunnable();
+        new Thread(showFrequencyRunnable).start();
+    }
+
+    /*
+    todo - slet
+    void sleepRadio(){
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
-    }
+        }finally {
+        }
+    }*/
 
 
     public Date getTime() {
@@ -149,5 +158,23 @@ todo implementer
 
     public void onLongClick_Snooze() {
         currentState.onLongClick_Snooze(this);
+    }
+
+    //Lader fm/am blive set på displayet når der skiftes mellem disse.
+    class ShowFrequencyRunnable implements Runnable {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateDisplayRadio();
+                }
+            });
+        }
     }
 }

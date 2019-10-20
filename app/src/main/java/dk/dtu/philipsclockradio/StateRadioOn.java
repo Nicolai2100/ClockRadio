@@ -9,20 +9,17 @@ public class StateRadioOn extends StateAdapter {
 
     private ArrayList<Double> radioChannelsList;
 
-    private Double currentRadioChannel = null;
+    private double currentRadioChannel;
     private String currentRadioFrequency;
-    private Double fmRadioChannel = 0.0;
-    private Double amRadioChannel = 0.0;
+    private double fmRadioChannel;
+    private double amRadioChannel = 0.0;
 
     private StateRadioOn() {
         radioChannelsList = getRadioChannelsList();
-
-        if (currentRadioChannel == null) {
-            currentRadioChannel = 0.0;
-            fmRadioChannel = currentRadioChannel;
-            currentRadioFrequency = "FM";
-        }
-    }
+        currentRadioChannel = 0.0;
+        fmRadioChannel = currentRadioChannel;
+        currentRadioFrequency = "FM";
+}
 
     public static StateRadioOn getInstance() {
         if (instance == null) {
@@ -33,8 +30,8 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onEnterState(ContextClockradio context) {
-        context.showDisplayFrequencyRadio(currentRadioFrequency);
         context.setRadio(currentRadioChannel);
+        context.showDisplayFrequencyRadio(currentRadioFrequency);
     }
 
     @Override
@@ -49,14 +46,13 @@ public class StateRadioOn extends StateAdapter {
             fmRadioChannel = currentRadioChannel;
             currentRadioFrequency = "AM";
             currentRadioChannel = amRadioChannel;
-
         } else {
             amRadioChannel = currentRadioChannel;
             currentRadioFrequency = "FM";
             currentRadioChannel = fmRadioChannel;
         }
-        context.showDisplayFrequencyRadio(currentRadioFrequency);
         context.setRadio(currentRadioChannel);
+        context.showDisplayFrequencyRadio(currentRadioFrequency);
     }
 
     @Override
