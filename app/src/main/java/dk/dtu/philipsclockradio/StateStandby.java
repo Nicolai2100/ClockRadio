@@ -11,6 +11,8 @@ public class StateStandby extends StateAdapter {
     private Date mTime;
     private static Handler mHandler = new Handler();
     private ContextClockradio mContext;
+    private boolean alarmMuted;
+    private int alarmSource;
 
     private StateStandby(Date time) {
         mTime = time;
@@ -81,5 +83,34 @@ public class StateStandby extends StateAdapter {
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
         context.setState(StateAlarmSettingMode.getInstance());
+    }
+
+    @Override
+    public void onLongClick_AL2(ContextClockradio context) {
+        onLongClick_AL1(context);
+    }
+
+    @Override
+    public void onClick_AL1(ContextClockradio context) {
+        ++alarmSource;
+        if (alarmSource > 3) {
+            alarmSource = 1;
+        }
+        if (alarmSource == 1) {
+            alarmMuted = false;
+            context.ui.turnOnLED(1);
+        } else if (alarmSource == 2) {
+            alarmMuted = false;
+            context.ui.turnOffLED(1);
+            context.ui.turnOnLED(2);
+        } else if (alarmSource == 3) {
+            alarmMuted = true;
+            context.ui.turnOffLED(2);
+        }
+    }
+
+    @Override
+    public void onClick_AL2(ContextClockradio context) {
+        onLongClick_AL1(context);
     }
 }

@@ -3,6 +3,9 @@ package dk.dtu.philipsclockradio;
 import android.os.Handler;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -163,6 +166,16 @@ public class ContextClockradio {
 
     public void setAlarm(Time time) {
         this.alarmTime = time;
+
+     /*   int hour = mTime.getHours();
+        int minutte = mTime.getMinutes();
+        LocalTime start = LocalTime.of(hour,minutte,00);
+
+        LocalTime end = LocalTime.of(16, 59, 55);
+        Duration duration = Duration.between(start, end);
+
+        mTime
+*/
     }
 
     public void setSleepTimer(int sleepTime) {
@@ -183,6 +196,7 @@ public class ContextClockradio {
 
         @Override
         public void run() {
+            //todo - for hver sekund en tråd kører - giv besked om længde osv...
 
             if (application.equalsIgnoreCase("frequency")) {
                 try {
@@ -197,10 +211,21 @@ public class ContextClockradio {
                     }
                 });
             }
-            if (application.equalsIgnoreCase("alarmTime")) {
-               //todo implementer
+          /*  todo implement alarm - if (application.equalsIgnoreCase("alarmTime")) {
+                //todo implementer
+
+                //alarmTime.
+                //toLocalTime(java.sql.Time.valueOf(LocalTime.now())))
+
                 try {
-                    Thread.sleep(2000);
+
+
+
+                    SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String time = localDateFormat.format(mTime);
+
+                    //alarmTime;
+                    TimeUnit.MINUTES.sleep(secondsToSleep);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -210,10 +235,8 @@ public class ContextClockradio {
                         updateDisplayRadioChannel();
                     }
                 });
-
-
             }
-
+*/
             if (application.equalsIgnoreCase("sleepTimer")) {
                 try {
                     Thread.sleep(sleepTime * 1000 * 60);
@@ -221,14 +244,12 @@ public class ContextClockradio {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Snap 1");
 
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         ui.turnOffLED(3);
                         if (currentState == StateRadioOn.getInstance()) {
-                            System.out.println("Snap 2");
                             setState(StateStandby.getInstance(getTime()));
                         }
                     }
@@ -237,25 +258,3 @@ public class ContextClockradio {
         }
     }
 }
-
-
-/*if (application.equalsIgnoreCase("sleepTimer")) {
-                try {
-//                    Thread.sleep(sleepTime * 1000 * 60);
-                    Thread.sleep(10 *1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Snap 1");
-                        if (currentState.equals("StateRadioOn")) {
-                            System.out.println("Snap 2");
-                            setState(StateStandby.getInstance(getTime()));
-                        }
-                        ui.turnOffLED(3);
-
-                    }
-                });
-            }*/
