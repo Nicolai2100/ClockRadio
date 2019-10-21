@@ -3,7 +3,6 @@ package dk.dtu.philipsclockradio;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Formatter;
 
 public class StateAlarmSettingMode extends StateAdapter {
     private static StateAlarmSettingMode instance = null;
@@ -13,8 +12,8 @@ public class StateAlarmSettingMode extends StateAdapter {
     Time alarmTime;
     DateFormat sdf = new SimpleDateFormat("HH:mm");
 
-    private StateAlarmSettingMode(){
-        alarmTime = new Time(00,00,0);
+    private StateAlarmSettingMode() {
+        alarmTime = new Time(00, 00, 0);
     }
 
     public static StateAlarmSettingMode getInstance() {
@@ -39,34 +38,40 @@ public class StateAlarmSettingMode extends StateAdapter {
     @Override
     public void onClick_Hour(ContextClockradio context) {
         ++hour;
-        if (hour > 23){
+        if (hour > 23) {
             hour = 0;
         }
-        alarmTime = new Time(hour,minutte,0);
+        alarmTime = new Time(hour, minutte, 0);
         String strDate = sdf.format(alarmTime);
-        context.updateDisplaySimpleString(strDate);    }
+        context.updateDisplaySimpleString(strDate);
+    }
 
     @Override
     public void onClick_Min(ContextClockradio context) {
         ++minutte;
-        if (minutte > 59){
+        if (minutte > 59) {
             minutte = 0;
             ++hour;
         }
-        alarmTime = new Time(hour,minutte,0);
+        alarmTime = new Time(hour, minutte, 0);
         String strDate = sdf.format(alarmTime);
-        context.updateDisplaySimpleString(strDate);    }
+        context.updateDisplaySimpleString(strDate);
+    }
 
-    //todo - både AL1 og AL2 skal holdes nede samtidig
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
         //alarm on
         alarmOn = true;
-        context.ui.turnOnLED(2);
+        context.changeAlarmSourse();
         context.setAlarm(alarmTime);
         System.out.println("Alarm set for " + alarmTime);
         context.setState(StateStandby.getInstance(context.getTime()));
 
-        //todo - skal alarmen startes / køre i context i en ny tråd?
+        //todo - alarm startes
+    }
+
+    @Override
+    public void onLongClick_AL2(ContextClockradio context) {
+        onLongClick_AL1(context);
     }
 }

@@ -22,6 +22,8 @@ public class ContextClockradio {
     private int sleepTime;
 
     private Handler mainHandler = new Handler();
+    private int alarmSource;
+    private boolean alarmMuted;
 
     public ContextClockradio(MainUI context) {
         ui = context;
@@ -185,6 +187,31 @@ public class ContextClockradio {
         new Thread(timerRunnable).start();
     }
 
+    public int getAlarmSource() {
+        return alarmSource;
+    }
+
+    public void setAlarmSource(int alarmSource) {
+        this.alarmSource = alarmSource;
+    }
+
+    public void changeAlarmSourse() {
+        ++alarmSource;
+        if (alarmSource > 3) {
+            alarmSource = 1;
+        }
+        if (alarmSource == 1) {
+            alarmMuted = false;
+            ui.turnOnLED(1);
+        } else if (alarmSource == 2) {
+            alarmMuted = false;
+            ui.turnOffLED(1);
+            ui.turnOnLED(2);
+        } else if (alarmSource == 3) {
+            alarmMuted = true;
+            ui.turnOffLED(2);
+        }
+    }
 
     //Lader fm/am blive set på displayet når der skiftes mellem disse.
     class TimerRunnable implements Runnable {
@@ -213,6 +240,14 @@ public class ContextClockradio {
             }
           /*  todo implement alarm - if (application.equalsIgnoreCase("alarmTime")) {
                 //todo implementer
+
+                    if (alarmMuted) {
+                        return;
+                        else{
+                            continue;
+                        }
+
+                    }
 
                 //alarmTime.
                 //toLocalTime(java.sql.Time.valueOf(LocalTime.now())))

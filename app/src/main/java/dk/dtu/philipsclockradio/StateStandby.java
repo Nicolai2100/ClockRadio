@@ -92,6 +92,13 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onClick_AL1(ContextClockradio context) {
+        context.changeAlarmSourse();
+    }
+
+  /*  @Override
+    public void onClick_AL1(ContextClockradio context) {
+        //todo - flyt til context
+        this.alarmSource = context.getAlarmSource();
         ++alarmSource;
         if (alarmSource > 3) {
             alarmSource = 1;
@@ -107,7 +114,8 @@ public class StateStandby extends StateAdapter {
             alarmMuted = true;
             context.ui.turnOffLED(2);
         }
-    }
+        context.setAlarmSource(alarmSource);
+    }*/
 
     @Override
     public void onClick_AL2(ContextClockradio context) {
