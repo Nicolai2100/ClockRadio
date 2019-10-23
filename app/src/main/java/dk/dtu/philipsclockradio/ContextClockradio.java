@@ -1,6 +1,8 @@
 package dk.dtu.philipsclockradio;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -18,8 +20,9 @@ public class ContextClockradio {
     private Date mTime;
     private Double mRadioChannel;
     private String mDisplayText;
-    private Time alarmTime;
+    private Date alarmTime;
     private int sleepTime;
+    private SharedPreferences sharedPreferences;
 
     private Handler mainHandler = new Handler();
     private int alarmSource;
@@ -81,17 +84,6 @@ public class ContextClockradio {
     public Date getTime() {
         return mTime;
     }
-
-    /*
-    todo - slet
-    void sleepRadio(){
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally {
-        }
-    }*/
 
     //Opdaterer kontekst time state og UI
     void setTime(Date time) {
@@ -166,7 +158,7 @@ public class ContextClockradio {
         currentState.onLongClick_Snooze(this);
     }
 
-    public void setAlarm(Time time) {
+    public void setAlarm(Date time) {
         this.alarmTime = time;
 
      /*   int hour = mTime.getHours();
@@ -178,6 +170,10 @@ public class ContextClockradio {
 
         mTime
 */
+    }
+
+    public Date getAlarmTime() {
+        return alarmTime;
     }
 
     public void setSleepTimer(int sleepTime) {
@@ -213,6 +209,10 @@ public class ContextClockradio {
         }
     }
 
+    public void startAlarm(){
+
+    }
+
     //Lader fm/am blive set på displayet når der skiftes mellem disse.
     class TimerRunnable implements Runnable {
         String application = null;
@@ -246,16 +246,10 @@ public class ContextClockradio {
                         else{
                             continue;
                         }
-
                     }
-
                 //alarmTime.
                 //toLocalTime(java.sql.Time.valueOf(LocalTime.now())))
-
                 try {
-
-
-
                     SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
                     String time = localDateFormat.format(mTime);
 

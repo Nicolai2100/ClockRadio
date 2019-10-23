@@ -98,7 +98,13 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
         if(text.length() > 5){
             subtext = text.substring(0, 4);
         }
-        timeTextView.setText(subtext);
+        try{
+            timeTextView.setText(subtext);
+
+        }catch (NullPointerException e){
+            timeTextView.setText("sn");
+
+        }
     }
 
     // Denne metode kaldes når der bliver trykket på en knap
