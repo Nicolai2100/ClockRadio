@@ -36,8 +36,7 @@ public class StateStandby extends StateAdapter {
                 mContext.setTime(mTime);
                 if (alarmSet) {
                     if (alarmTime != null && mTime.getHours() == alarmTime.getHours() && mTime.getMinutes() == alarmTime.getMinutes()) {
-                        //todo alarm goes off
-                        mContext.updateDisplaySimpleString("ALARM");
+                        mContext.setState(StateAlarmRunning.getInstance(mContext.getAlarmSource()));
                     }
                 }
             } finally {
@@ -88,7 +87,7 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
-        context.setState(StateAlarmSettingMode.getInstance());
+        context.setState(StateAlarmSettingMode.getInstance(this));
     }
 
     @Override
@@ -97,7 +96,23 @@ public class StateStandby extends StateAdapter {
     }
 
     @Override
+    public void onClick_AL1(ContextClockradio context) {
+        context.changeAlarmSourse();
+    }
+
+    @Override
     public void onClick_AL2(ContextClockradio context) {
-        onLongClick_AL1(context);
+        onClick_AL1(context);
+    }
+
+    public void setAlarmTime(Date alarmTime) {
+        this.alarmTime = alarmTime;
+        this.alarmSet = true;
+    }
+
+    @Override
+    public void onLongClick_Snooze(ContextClockradio context) {
+        //todo slet dette - til test
+        context.setState(StateAlarmRunning.getInstance(mContext.getAlarmSource()));
     }
 }

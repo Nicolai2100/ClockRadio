@@ -1,32 +1,31 @@
 package dk.dtu.philipsclockradio;
 
-import java.io.InputStreamReader;
+import android.content.SharedPreferences;
+
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-import java.util.concurrent.ConcurrentNavigableMap;
 
 public class StateAlarmSettingMode extends StateAdapter {
     private static StateAlarmSettingMode instance = null;
+
+    private SharedPreferences sharedPreferences;
     private boolean alarmOn;
     private int hour = 00;
     private int minutte = 00;
-    Time alarmTime;
+    Date alarmTime;
     DateFormat sdf = new SimpleDateFormat("HH:mm");
+    StateStandby stateStandby;
 
-    private StateAlarmSettingMode() {
+    private StateAlarmSettingMode(StateStandby stateStandby) {
+        this.stateStandby = stateStandby;
         alarmTime = new Time(00, 00, 0);
     }
 
-    public static StateAlarmSettingMode getInstance() {
+    public static StateAlarmSettingMode getInstance(StateStandby stateStandby) {
         if (instance == null) {
-            instance = new StateAlarmSettingMode();
+            instance = new StateAlarmSettingMode(stateStandby);
         }
         return instance;
     }
@@ -36,6 +35,7 @@ public class StateAlarmSettingMode extends StateAdapter {
         context.ui.turnOnTextBlink();
         String strDate = sdf.format(alarmTime);
         context.updateDisplaySimpleString(strDate);
+        //sharedPreferences = new Sha
     }
 
     @Override
@@ -70,27 +70,17 @@ public class StateAlarmSettingMode extends StateAdapter {
     public void onLongClick_AL1(ContextClockradio context) {
         //alarm on
         alarmOn = true;
-        context.changeAlarmSourse();
+        alarmTime.setHours(12);
+        alarmTime.setMinutes(02);
         context.setAlarm(alarmTime);
+        if (context.getAlarmSource() == 0) {
+            context.setAlarmSource(1);
+            context.ui.turnOnLED(1);
 
-
-
+        }
+        stateStandby.setAlarmTime(alarmTime);
         System.out.println("Alarm set for " + alarmTime);
         context.setState(StateStandby.getInstance(context.getTime()));
-
-        Date today = context.getTime();
-        today.setHours(hour);
-        today.setMinutes(minutte);
-
-        /*
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.HOUR, hour);
-        calendar.set(Calendar.MINUTE, minutte);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.setTimeZone(TimeZone.getTimeZone("CET"));
-        System.out.println(calendar.getTime());
-        System.out.println(calendar);*/
     }
 
     @Override

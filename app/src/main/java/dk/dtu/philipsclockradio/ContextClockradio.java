@@ -4,13 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class ContextClockradio {
     public static MainUI ui;
@@ -93,6 +88,50 @@ public class ContextClockradio {
         }
     }
 
+    public void setAlarm(Date time) {
+        this.alarmTime = time;
+    }
+
+    public Date getAlarmTime() {
+        return alarmTime;
+    }
+
+    public void setSleepTimer(int sleepTime) {
+        this.sleepTime = sleepTime;
+        System.out.println("Sleep timer on for " + sleepTime + " minutes");
+        TimerRunnable timerRunnable = new TimerRunnable("sleepTimer");
+        new Thread(timerRunnable).start();
+    }
+
+    public int getAlarmSource() {
+        return alarmSource;
+    }
+
+    public void setAlarmSource(int alarmSource) {
+        this.alarmSource = alarmSource;
+    }
+
+    public void changeAlarmSourse() {
+        ++alarmSource;
+        if (alarmSource > 3) {
+            alarmSource = 1;
+        }
+        if (alarmSource == 1) {
+            alarmMuted = false;
+            ui.turnOnLED(1);
+        } else if (alarmSource == 2) {
+            alarmMuted = false;
+            ui.turnOffLED(1);
+            ui.turnOnLED(2);
+        } else if (alarmSource == 3) {
+            alarmMuted = true;
+            ui.turnOffLED(2);
+        }
+    }
+
+    public void startAlarm(){
+
+    }
     //Disse metoder bliver kaldt fra UI tråden
     public void onClick_Hour() {
         currentState.onClick_Hour(this);
@@ -156,61 +195,6 @@ public class ContextClockradio {
 
     public void onLongClick_Snooze() {
         currentState.onLongClick_Snooze(this);
-    }
-
-    public void setAlarm(Date time) {
-        this.alarmTime = time;
-
-     /*   int hour = mTime.getHours();
-        int minutte = mTime.getMinutes();
-        LocalTime start = LocalTime.of(hour,minutte,00);
-
-        LocalTime end = LocalTime.of(16, 59, 55);
-        Duration duration = Duration.between(start, end);
-
-        mTime
-*/
-    }
-
-    public Date getAlarmTime() {
-        return alarmTime;
-    }
-
-    public void setSleepTimer(int sleepTime) {
-        this.sleepTime = sleepTime;
-        System.out.println("Sleep timer on for " + sleepTime + " minutes");
-        TimerRunnable timerRunnable = new TimerRunnable("sleepTimer");
-        new Thread(timerRunnable).start();
-    }
-
-    public int getAlarmSource() {
-        return alarmSource;
-    }
-
-    public void setAlarmSource(int alarmSource) {
-        this.alarmSource = alarmSource;
-    }
-
-    public void changeAlarmSourse() {
-        ++alarmSource;
-        if (alarmSource > 3) {
-            alarmSource = 1;
-        }
-        if (alarmSource == 1) {
-            alarmMuted = false;
-            ui.turnOnLED(1);
-        } else if (alarmSource == 2) {
-            alarmMuted = false;
-            ui.turnOffLED(1);
-            ui.turnOnLED(2);
-        } else if (alarmSource == 3) {
-            alarmMuted = true;
-            ui.turnOffLED(2);
-        }
-    }
-
-    public void startAlarm(){
-
     }
 
     //Lader fm/am blive set på displayet når der skiftes mellem disse.

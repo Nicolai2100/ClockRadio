@@ -14,7 +14,7 @@ import java.util.logging.SimpleFormatter;
 
 import static org.junit.Assert.*;
 
-public class StateAlarmSettingModeTest {
+public class StateAlarmRunningSettingModeTest {
    /* MainUI mainUI = new MainUI();
     ContextClockradio context = new ContextClockradio(mainUI);
     StateAlarmSettingMode stateAlarmSettingMode = StateAlarmSettingMode.getInstance();*/
