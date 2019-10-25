@@ -70,8 +70,7 @@ public class StateAlarmRunning extends StateAdapter {
         @Override
         public void run() {
             try {
-                //todo sæt til snoozeTime
-                Thread.sleep(1000 * 5);
+                Thread.sleep(1000 * snoozeTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

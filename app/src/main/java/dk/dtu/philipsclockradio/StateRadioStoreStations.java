@@ -3,21 +3,18 @@ package dk.dtu.philipsclockradio;
 public class StateRadioStoreStations extends StateAdapter {
     private static StateRadioStoreStations instance = null;
 
-    //todo slet denne
-    private StateRadioOn stateRadioOn;
     private double currentRadioChannel;
     private double[] savedChannels;
     private int pointer;
 
-    private StateRadioStoreStations(StateRadioOn stateRadioOn, double currentRadioChannel) {
-        this.stateRadioOn = stateRadioOn;
+    private StateRadioStoreStations(double currentRadioChannel) {
         this.currentRadioChannel = currentRadioChannel;
         savedChannels = new double[20];
     }
 
-    public static StateRadioStoreStations getInstant(StateRadioOn stateRadioOnInstant, double currentRadioChannel) {
+    public static StateRadioStoreStations getInstant(double currentRadioChannel) {
         if (instance == null) {
-            instance = new StateRadioStoreStations(stateRadioOnInstant, currentRadioChannel);
+            instance = new StateRadioStoreStations(currentRadioChannel);
         }
         return instance;
     }

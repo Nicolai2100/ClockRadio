@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class StateRadioOn extends StateAdapter {
-    //todo am og fm frekvens gemmes og aktiveres når der skiftes
+
     private static StateRadioOn instance = null;
-
     private ArrayList<Double> radioChannelsList;
-
     private double currentRadioChannel;
     private String currentRadioFrequency;
     private double fmRadioChannel;
@@ -19,7 +17,7 @@ public class StateRadioOn extends StateAdapter {
         currentRadioChannel = 0.0;
         fmRadioChannel = currentRadioChannel;
         currentRadioFrequency = "FM";
-}
+    }
 
     public static StateRadioOn getInstance() {
         if (instance == null) {
@@ -57,7 +55,6 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onExitState(ContextClockradio context) {
-        //context.ui.turnOffTextBlink();
     }
 
     @Override
@@ -94,7 +91,6 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onClick_Preset(ContextClockradio context) {
-        //context.setState(new StateStandby(context.getTime()));
     }
 
     private ArrayList<Double> getRadioChannelsList() {
@@ -116,7 +112,7 @@ public class StateRadioOn extends StateAdapter {
 
         int lastChannelIndex = arr.size() - 1;
         double newCHannel = 0.0;
-        // Corner cases
+
         if (target < arr.get(0))
             return arr.get(0);
         if (target >= arr.get(lastChannelIndex))
@@ -135,7 +131,7 @@ public class StateRadioOn extends StateAdapter {
 
         int lastChannelIndex = arr.size() - 1;
         double newChannel = 0.0;
-        // Corner cases
+
         if (target <= arr.get(0))
             return arr.get(lastChannelIndex);
         if (target > arr.get(lastChannelIndex))
@@ -152,7 +148,7 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onLongClick_Preset(ContextClockradio context) {
-        context.setState(StateRadioStoreStations.getInstant(this, currentRadioChannel));
+        context.setState(StateRadioStoreStations.getInstant(currentRadioChannel));
     }
 }
 

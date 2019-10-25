@@ -18,7 +18,6 @@ public class ContextClockradio {
     private Date alarmTime;
     private int sleepTime;
     private SharedPreferences sharedPreferences;
-
     private Handler mainHandler = new Handler();
     private int alarmSource;
     private boolean alarmMuted;
@@ -51,19 +50,19 @@ public class ContextClockradio {
         ui.setDisplayText(mDisplayText);
     }
 
-    //Opdaterer kontekst time state og UI
+    //Opdaterer kontekst radioChannel state og UI
     void setRadio(Double radioChannel) {
         this.mRadioChannel = radioChannel;
         if (currentState.getClass().getSimpleName().equals("StateRadioOn")) {
             updateDisplayRadioChannel();
         }
     }
-
+    //Opdaterer UI
     void updateDisplayRadioChannel() {
         mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
-
+    //Opdaterer UI
     void updateDisplaySimpleString(String input) {
         ui.setDisplayText(input);
     }
@@ -129,9 +128,6 @@ public class ContextClockradio {
         }
     }
 
-    public void startAlarm(){
-
-    }
     //Disse metoder bliver kaldt fra UI tråden
     public void onClick_Hour() {
         currentState.onClick_Hour(this);
@@ -197,7 +193,6 @@ public class ContextClockradio {
         currentState.onLongClick_Snooze(this);
     }
 
-    //Lader fm/am blive set på displayet når der skiftes mellem disse.
     class TimerRunnable implements Runnable {
         String application = null;
 
@@ -207,8 +202,7 @@ public class ContextClockradio {
 
         @Override
         public void run() {
-            //todo - for hver sekund en tråd kører - giv besked om længde osv...
-
+            //Lader fm/am blive set på displayet når der skiftes mellem disse.
             if (application.equalsIgnoreCase("frequency")) {
                 try {
                     Thread.sleep(2000);
@@ -222,38 +216,10 @@ public class ContextClockradio {
                     }
                 });
             }
-          /*  todo implement alarm - if (application.equalsIgnoreCase("alarmTime")) {
-                //todo implementer
-
-                    if (alarmMuted) {
-                        return;
-                        else{
-                            continue;
-                        }
-                    }
-                //alarmTime.
-                //toLocalTime(java.sql.Time.valueOf(LocalTime.now())))
-                try {
-                    SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm:ss");
-                    String time = localDateFormat.format(mTime);
-
-                    //alarmTime;
-                    TimeUnit.MINUTES.sleep(secondsToSleep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateDisplayRadioChannel();
-                    }
-                });
-            }
-*/
+            //Hvis sleep-funktionen er aktiveret går den fra radio til standby efter tiden er gået
             if (application.equalsIgnoreCase("sleepTimer")) {
                 try {
                     Thread.sleep(sleepTime * 1000 * 60);
-                    //todo slet - for test: Thread.sleep(8 * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
