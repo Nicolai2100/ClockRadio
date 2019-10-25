@@ -115,4 +115,6 @@ public class StateStandby extends StateAdapter {
         //todo slet dette - til test
         context.setState(StateAlarmRunning.getInstance(mContext.getAlarmSource()));
     }
+
+
 }

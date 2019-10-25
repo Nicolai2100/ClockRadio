@@ -1,6 +1,7 @@
 package dk.dtu.philipsclockradio;
 
 public class StateAdapter implements State {
+
     @Override
     public void onEnterState(ContextClockradio context) {
 
