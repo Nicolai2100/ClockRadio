@@ -1,5 +1,9 @@
 package dk.dtu.philipsclockradio;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,11 +16,19 @@ public class StateRadioOn extends StateAdapter {
     private double fmRadioChannel;
     private double amRadioChannel = 0.0;
 
+    private String SHARED_PREFS = "sharedPrefs";
+    private String CURRENT_RADIOCHANNEL = "currentChannel";
+    private String CURRENT_RADIOFREQUENCY = "currentFrequency";
+
     private StateRadioOn() {
         radioChannelsList = getRadioChannelsList();
         currentRadioChannel = 0.0;
         fmRadioChannel = currentRadioChannel;
         currentRadioFrequency = "FM";
+
+        loadData();
+
+
     }
 
     public static StateRadioOn getInstance() {
@@ -25,6 +37,24 @@ public class StateRadioOn extends StateAdapter {
         }
         return instance;
     }
+
+    private void saveDate() {
+        SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(CURRENT_RADIOCHANNEL, (float) currentRadioChannel);
+        editor.putString(CURRENT_RADIOFREQUENCY, currentRadioFrequency);
+        editor.apply();
+
+        Toast.makeText(MainUI.getContextOfApp(), "Data saved: " + CURRENT_RADIOCHANNEL, Toast.LENGTH_LONG).show();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        currentRadioChannel = sharedPreferences.getFloat(CURRENT_RADIOCHANNEL, 0.0f);
+        currentRadioFrequency = sharedPreferences.getString(CURRENT_RADIOFREQUENCY, "FM");
+        Toast.makeText(MainUI.getContextOfApp(), "Data loaded" + CURRENT_RADIOCHANNEL, Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onEnterState(ContextClockradio context) {
@@ -55,6 +85,7 @@ public class StateRadioOn extends StateAdapter {
 
     @Override
     public void onExitState(ContextClockradio context) {
+        saveDate();
     }
 
     @Override

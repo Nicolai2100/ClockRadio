@@ -1,6 +1,8 @@
 package dk.dtu.philipsclockradio;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -25,6 +27,7 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
     private boolean displayLed1, displayLed2, displayLed3, displayLed4, displayLed5, displayBlink, musicPlaying;
     private boolean longclick = false;
     private View currentbtn;
+    private static Context contextOfApp;
 
     final Handler handler = new Handler();
     Runnable mLongPressed = new Runnable() {
@@ -39,6 +42,8 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_philips_clockradio_main);
+
+        contextOfApp = this;
 
         // UI Initialiseringer
         btn_hour = (Button) findViewById(R.id.btn_hour);
@@ -73,11 +78,12 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
 
         logik = new ContextClockradio(this);
 
-        try{
+        try {
             timeTextView.setText(savedInstanceState.getString("displayText"));
-        } catch(NullPointerException e){}
+        } catch (NullPointerException e) {
+        }
 
-        try{
+        try {
             boolean[] bools = savedInstanceState.getBooleanArray("bools");
             displayLed1 = bools[0];
             displayLed2 = bools[1];
@@ -87,21 +93,22 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
             displayBlink = bools[5];
             musicPlaying = bools[6];
 
-        } catch (NullPointerException e){}
+        } catch (NullPointerException e) {
+        }
 
         updateUI();
     }
 
     // Denne metode sætter teksten på displayet (f.eks. klokken)
-    public void setDisplayText(String text){
+    public void setDisplayText(String text) {
         String subtext = text;
-        if(text.length() > 5){
+        if (text.length() > 5) {
             subtext = text.substring(0, 4);
         }
-        try{
+        try {
             timeTextView.setText(subtext);
 
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             timeTextView.setText("sn");
 
         }
@@ -109,42 +116,42 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
 
     // Denne metode kaldes når der bliver trykket på en knap
     private void onClick(View view) {
-        if(view == btn_hour){
+        if (view == btn_hour) {
             logik.onClick_Hour();
-        } else if(view == btn_min){
+        } else if (view == btn_min) {
             logik.onClick_Min();
-        } else if(view == btn_preset){
+        } else if (view == btn_preset) {
             logik.onClick_Preset();
-        } else if(view == btn_power){
+        } else if (view == btn_power) {
             logik.onClick_Power();
-        } else if(view == btn_sleep){
+        } else if (view == btn_sleep) {
             logik.onClick_Sleep();
-        } else if(view == btn_al1){
+        } else if (view == btn_al1) {
             logik.onClick_AL1();
-        } else if(view == btn_al2){
+        } else if (view == btn_al2) {
             logik.onClick_AL2();
-        } else if(view == btn_snooze) {
+        } else if (view == btn_snooze) {
             logik.onClick_Snooze();
         }
     }
 
     // Denne metode kaldes når der bliver holdt en knap nede i over 2 sekunder
     private void onLongClick(View view) {
-        if(view == btn_hour){
+        if (view == btn_hour) {
             logik.onLongClick_Hour();
-        } else if(view == btn_min){
+        } else if (view == btn_min) {
             logik.onLongClick_Min();
-        } else if(view == btn_preset){
+        } else if (view == btn_preset) {
             logik.onLongClick_Preset();
-        } else if(view == btn_power){
+        } else if (view == btn_power) {
             logik.onLongClick_Power();
-        } else if(view == btn_sleep){
+        } else if (view == btn_sleep) {
             logik.onLongClick_Sleep();
-        } else if(view == btn_al1){
+        } else if (view == btn_al1) {
             logik.onLongClick_AL1();
-        } else if(view == btn_al2){
+        } else if (view == btn_al2) {
             logik.onLongClick_AL2();
-        } else if(view == btn_snooze) {
+        } else if (view == btn_snooze) {
             logik.onLongClick_Snooze();
         }
     }
@@ -152,16 +159,16 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
     // Denne metode gemmer alt UI state, til hvis der f.eks. laves en skærmrotation
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        boolean[] bools = new boolean[] {displayLed1, displayLed2, displayLed3, displayLed4, displayLed5, displayBlink, musicPlaying};
-        savedInstanceState.putString("displayText", logik.getTime().toString().substring(10,16));
+        boolean[] bools = new boolean[]{displayLed1, displayLed2, displayLed3, displayLed4, displayLed5, displayBlink, musicPlaying};
+        savedInstanceState.putString("displayText", logik.getTime().toString().substring(10, 16));
         //savedInstanceState.putString("displayText", timeTextView.getText().toString());
         savedInstanceState.putBooleanArray("bools", bools);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     // Tænder og slukker for en LED pære i displayet (Fra 1 til 5)
-    public void turnOnLED(int LEDnumber){
-        switch(LEDnumber){
+    public void turnOnLED(int LEDnumber) {
+        switch (LEDnumber) {
             case 1:
                 displayLed1 = true;
                 updateUI();
@@ -187,8 +194,8 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
         }
     }
 
-    public void turnOffLED(int LEDnumber){
-        switch(LEDnumber){
+    public void turnOffLED(int LEDnumber) {
+        switch (LEDnumber) {
             case 1:
                 displayLed1 = false;
                 updateUI();
@@ -214,7 +221,7 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
         }
     }
 
-    private void updateUI(){
+    private void updateUI() {
         circle1.setVisibility(displayLed1 ? View.VISIBLE : View.INVISIBLE);
         circle2.setVisibility(displayLed2 ? View.VISIBLE : View.INVISIBLE);
         circle3.setVisibility(displayLed3 ? View.VISIBLE : View.INVISIBLE);
@@ -223,7 +230,7 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
     }
 
     // Denne funktion får display-teksten (F.eks. med klokkeslættet) til at blinke.
-    public void turnOnTextBlink(){
+    public void turnOnTextBlink() {
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(400);
         anim.setStartOffset(20);
@@ -232,13 +239,13 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
         timeTextView.startAnimation(anim);
     }
 
-    public void turnOffTextBlink(){
+    public void turnOffTextBlink() {
         timeTextView.clearAnimation();
     }
 
-    public void toggleRadioPlaying(){
+    public void toggleRadioPlaying() {
         musicPlaying = !musicPlaying;
-        if(musicPlaying){
+        if (musicPlaying) {
             statusTextview.setText("Radio: ON");
         } else {
             statusTextview.setText("Radio: OFF");
@@ -251,12 +258,12 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
     // NB: Skal ikke kaldes udefra!
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
             currentbtn = v;
         handler.postDelayed(mLongPressed, 2000);
-        if(event.getAction() == MotionEvent.ACTION_UP){
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             handler.removeCallbacks(mLongPressed);
-            if(longclick == false) {
+            if (longclick == false) {
                 onClick(v);
             }
             longclick = false;
@@ -264,4 +271,8 @@ public class MainUI extends AppCompatActivity implements OnTouchListener {
         return false;
     }
 
+    //Taget fra https://stackoverflow.com/questions/7491287/android-how-to-use-sharedpreferences-in-non-activity-class
+    public static Context getContextOfApp() {
+        return contextOfApp;
+    }
 }

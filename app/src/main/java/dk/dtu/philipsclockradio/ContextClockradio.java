@@ -6,10 +6,6 @@ import android.os.Handler;
 import java.util.Calendar;
 import java.util.Date;
 
-import dk.dtu.philipsclockradio.command_pattern_test.OnClick_SleepOperation;
-import dk.dtu.philipsclockradio.command_pattern_test.OnEnterStateOperation;
-import dk.dtu.philipsclockradio.command_pattern_test.StateCommandExecutioner;
-
 public class ContextClockradio {
 
     public static MainUI ui;
@@ -38,8 +34,7 @@ public class ContextClockradio {
 
         //Når app'en starter, så går vi ind i Standby State
         currentState = StateStandby.getInstance(mTime);
-        //currentState.onEnterState(this);
-        StateCommandExecutioner.getInstance().executeOperation(new OnEnterStateOperation(currentState,this));
+        currentState.onEnterState(this);
     }
 
     //setState er når vi skifter State
@@ -151,8 +146,7 @@ public class ContextClockradio {
     }
 
     public void onClick_Sleep() {
-        StateCommandExecutioner.getInstance().executeOperation(new OnClick_SleepOperation(currentState, this));
-        //currentState.onClick_Sleep(this);
+        currentState.onClick_Sleep(this);
     }
 
     public void onClick_AL1() {
