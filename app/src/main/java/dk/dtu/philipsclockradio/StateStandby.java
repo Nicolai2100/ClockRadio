@@ -76,7 +76,7 @@ public class StateStandby extends StateAdapter {
         if (!context.isClockRunning) {
             startClock();
         }
-        if (alarmTime == null) {
+        if (alarmTime == null ) {
             loadData();
         }
     }

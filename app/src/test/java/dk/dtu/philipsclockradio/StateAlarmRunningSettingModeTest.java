@@ -5,10 +5,13 @@ import android.icu.text.SimpleDateFormat;
 
 import org.junit.Test;
 
+import java.sql.Time;
+import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.SimpleFormatter;
 
@@ -21,6 +24,36 @@ public class StateAlarmRunningSettingModeTest {
 
     @Test
     public void onLongClick_AL1() {
+        String string1 = "20";
+        String string2 = "20";
+       // DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        Date date = new Date();
+        date.setHours(Integer.parseInt(string1));
+        date.setMinutes(Integer.parseInt(string2));
+        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+
+/*
+
+        String string = "January 2, 2010";
+        DateFormat format = new SimpleDateFormat("MMMM d, yyyy, HH:mm", Locale.ENGLISH);
+        date = format.parse(string);
+        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+*/
+        Date alarmTime;
+        java.text.DateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+
+        String string = "January 2, 2010";
+        //DateFormat format = new SimpleDateFormat("HH:mm");
+
+        alarmTime = new Time(00, 02, 0);
+        String strDate = sdf.format(alarmTime);
+        System.out.println(strDate);
+        /*try {
+            date = sdf.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010*/
     }
 
     @Test

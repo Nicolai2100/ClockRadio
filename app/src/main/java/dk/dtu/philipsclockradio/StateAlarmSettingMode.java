@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,14 +38,17 @@ public class StateAlarmSettingMode extends StateAdapter {
     public void loadData() {
         SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         alarmOn = sharedPreferences.getBoolean(ALARM_SET, false);
-        alarmTime = Time.valueOf(sharedPreferences.getString(ALARM_TIME, "00.00"));
-        Toast.makeText(MainUI.getContextOfApp(), "Loaded" + alarmTime.toString(), Toast.LENGTH_LONG).show();
-
-        if (alarmOn){
+        //alarmTime = Time.valueOf(sharedPreferences.getString(ALARM_TIME, "00.00"));
+        String alarmString = sharedPreferences.getString(ALARM_TIME, "00.00");
+        try {
+            alarmTime = sdf.parse(alarmString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (alarmOn) {
             onLongClick_AL1(context);
         }
     }
-
 
     private StateAlarmSettingMode(StateStandby stateStandby, ContextClockradio context) {
         this.stateStandby = stateStandby;
@@ -52,7 +56,6 @@ public class StateAlarmSettingMode extends StateAdapter {
         alarmTime = new Time(00, 00, 0);
 
     }
-
 
     public static StateAlarmSettingMode getInstance(StateStandby stateStandby, ContextClockradio context) {
         if (instance == null) {
@@ -103,8 +106,6 @@ public class StateAlarmSettingMode extends StateAdapter {
     public void onLongClick_AL1(ContextClockradio context) {
         //alarm on
         alarmOn = true;
-      /*  alarmTime.setHours(hour);
-        alarmTime.setMinutes(minutte);*/
         context.setAlarm(alarmTime);
         if (context.getAlarmSource() == 0) {
             context.setAlarmSource(1);

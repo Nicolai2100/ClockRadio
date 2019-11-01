@@ -1,5 +1,6 @@
 package dk.dtu.philipsclockradio;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
@@ -8,6 +9,8 @@ import java.util.Date;
 
 public class ContextClockradio {
 
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String ALARM_SOURCE = "alarmSource";
     public static MainUI ui;
 
     public boolean isClockRunning = false;
@@ -17,12 +20,24 @@ public class ContextClockradio {
     private String mDisplayText;
     private Date alarmTime;
     private int sleepTime;
-    private SharedPreferences sharedPreferences;
     private Handler mainHandler = new Handler();
     private int alarmSource;
-    private boolean alarmMuted;
+
+    private void saveDate() {
+        SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(ALARM_SOURCE, alarmSource);
+        editor.apply();
+    }
 
 
+    public void loadData() {
+        SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        alarmSource = sharedPreferences.getInt(ALARM_SOURCE, 0);
+        if (alarmSource > 0){
+            ui.turnOnLED(alarmSource);
+        }
+    }
 
     public ContextClockradio(MainUI context) {
         ui = context;
@@ -33,6 +48,8 @@ public class ContextClockradio {
             date.set(2019, 1, 1, 12, 00);
             mTime = date.getTime();
         }
+
+        loadData();
 
         //Når app'en starter, så går vi ind i Standby State
         currentState = StateStandby.getInstance(mTime);
@@ -59,11 +76,13 @@ public class ContextClockradio {
             updateDisplayRadioChannel();
         }
     }
+
     //Opdaterer UI
     void updateDisplayRadioChannel() {
         mDisplayText = mRadioChannel.toString();
         ui.setDisplayText(mDisplayText);
     }
+
     //Opdaterer UI
     void updateDisplaySimpleString(String input) {
         ui.setDisplayText(input);
@@ -118,16 +137,14 @@ public class ContextClockradio {
             alarmSource = 1;
         }
         if (alarmSource == 1) {
-            alarmMuted = false;
             ui.turnOnLED(1);
         } else if (alarmSource == 2) {
-            alarmMuted = false;
             ui.turnOffLED(1);
             ui.turnOnLED(2);
         } else if (alarmSource == 3) {
-            alarmMuted = true;
             ui.turnOffLED(2);
         }
+        saveDate();
     }
 
     //Disse metoder bliver kaldt fra UI tråden
