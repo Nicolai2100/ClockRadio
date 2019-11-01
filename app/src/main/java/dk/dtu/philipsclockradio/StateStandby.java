@@ -1,11 +1,18 @@
 package dk.dtu.philipsclockradio;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class StateStandby extends StateAdapter {
 
+    private static final String ALARM_SET = "alarmSet";
+    private static final String ALARM_TIME = "alarmTime";
+    private static final String SHARED_PREFS = "sharedPrefs";
     private static StateStandby instance = null;
 
     private Date mTime;
@@ -25,7 +32,13 @@ public class StateStandby extends StateAdapter {
         return instance;
     }
 
+    private void loadData() {
+        StateAlarmSettingMode.getInstance(this, mContext).loadData();
+    }
+
+
     //Opdaterer hvert 60. sekund med + 1 min til tiden
+    //samt kontrollerer om alarmen skal køres
     Runnable mSetTime = new Runnable() {
 
         @Override
@@ -59,10 +72,12 @@ public class StateStandby extends StateAdapter {
     public void onEnterState(ContextClockradio context) {
         //Lokal context oprettet for at Runnable kan få adgang
         mContext = context;
-
         context.updateDisplayTime();
         if (!context.isClockRunning) {
             startClock();
+        }
+        if (alarmTime == null) {
+            loadData();
         }
     }
 
@@ -87,7 +102,7 @@ public class StateStandby extends StateAdapter {
 
     @Override
     public void onLongClick_AL1(ContextClockradio context) {
-        context.setState(StateAlarmSettingMode.getInstance(this));
+        context.setState(StateAlarmSettingMode.getInstance(this, mContext));
     }
 
     @Override
@@ -116,5 +131,7 @@ public class StateStandby extends StateAdapter {
         context.setState(StateAlarmRunning.getInstance(mContext.getAlarmSource()));
     }
 
-
+    @Override
+    public void onExitState(ContextClockradio context) {
+    }
 }

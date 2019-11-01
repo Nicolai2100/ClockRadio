@@ -41,15 +41,12 @@ public class StateRadioOn extends StateAdapter {
         editor.putFloat(CURRENT_RADIOCHANNEL, (float) currentRadioChannel);
         editor.putString(CURRENT_RADIOFREQUENCY, currentRadioFrequency);
         editor.apply();
-
-        Toast.makeText(MainUI.getContextOfApp(), "Data saved: " + CURRENT_RADIOCHANNEL, Toast.LENGTH_LONG).show();
     }
 
     private void loadData() {
         SharedPreferences sharedPreferences = MainUI.getContextOfApp().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         currentRadioChannel = sharedPreferences.getFloat(CURRENT_RADIOCHANNEL, 0.0f);
         currentRadioFrequency = sharedPreferences.getString(CURRENT_RADIOFREQUENCY, "FM");
-        Toast.makeText(MainUI.getContextOfApp(), "Data loaded" + CURRENT_RADIOCHANNEL, Toast.LENGTH_SHORT).show();
     }
 
 
