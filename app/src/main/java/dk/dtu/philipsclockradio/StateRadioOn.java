@@ -25,10 +25,7 @@ public class StateRadioOn extends StateAdapter {
         currentRadioChannel = 0.0;
         fmRadioChannel = currentRadioChannel;
         currentRadioFrequency = "FM";
-
         loadData();
-
-
     }
 
     public static StateRadioOn getInstance() {
@@ -107,9 +104,7 @@ public class StateRadioOn extends StateAdapter {
     //Søger efter næste kanal
     @Override
     public void onLongClick_Min(ContextClockradio context) {
-        if (!radioChannelsList.contains(currentRadioChannel)) {
-            currentRadioChannel = findNextChannel(radioChannelsList, currentRadioChannel);
-        }
+        currentRadioChannel = findNextChannel(radioChannelsList, currentRadioChannel);
         context.setRadio(currentRadioChannel);
     }
 
@@ -139,38 +134,38 @@ public class StateRadioOn extends StateAdapter {
         return radioChannelsList;
     }
 
-    public double findNextChannel(ArrayList<Double> arr, double target) {
+    public double findNextChannel(ArrayList<Double> channelList, double currentChannel) {
 
-        int lastChannelIndex = arr.size() - 1;
+        int lastChannelIndex = channelList.size() - 1;
         double newCHannel = 0.0;
 
-        if (target < arr.get(0))
-            return arr.get(0);
-        if (target >= arr.get(lastChannelIndex))
-            return arr.get(0);
+        if (currentChannel < channelList.get(0))
+            return channelList.get(0);
+        if (currentChannel >= channelList.get(lastChannelIndex))
+            return channelList.get(0);
 
         for (int i = 0; i < lastChannelIndex; i++) {
-            if (target >= arr.get(i) && target <= arr.get(i + 1)) {
-                newCHannel = arr.get(i + 1);
+            if (currentChannel >= channelList.get(i) && currentChannel < channelList.get(i + 1)) {
+                newCHannel = channelList.get(i + 1);
                 break;
             }
         }
         return newCHannel;
     }
 
-    public double findPreviousChannel(ArrayList<Double> arr, double target) {
+    public double findPreviousChannel(ArrayList<Double> channelList, double currentChannel) {
 
-        int lastChannelIndex = arr.size() - 1;
+        int lastChannelIndex = channelList.size() - 1;
         double newChannel = 0.0;
 
-        if (target <= arr.get(0))
-            return arr.get(lastChannelIndex);
-        if (target > arr.get(lastChannelIndex))
-            return arr.get(lastChannelIndex);
+        if (currentChannel <= channelList.get(0))
+            return channelList.get(lastChannelIndex);
+        if (currentChannel > channelList.get(lastChannelIndex))
+            return channelList.get(lastChannelIndex);
 
         for (int i = 0; i < lastChannelIndex; i++) {
-            if (target > arr.get(i) && target <= arr.get(i + 1)) {
-                newChannel = arr.get(i);
+            if (currentChannel > channelList.get(i) && currentChannel <= channelList.get(i + 1)) {
+                newChannel = channelList.get(i);
                 break;
             }
         }
